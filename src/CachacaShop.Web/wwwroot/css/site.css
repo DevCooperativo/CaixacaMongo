@@ -29,7 +29,7 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
-/* ---------- Alambique Online ---------- */
+/* ---------- Caixaça ---------- */
 .bg-cachaca {
   background: linear-gradient(90deg, #5b3a1a, #8a5a2b);
 }

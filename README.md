@@ -1,4 +1,4 @@
-# Alambique Online — E-commerce de cachaças artesanais
+# Caixaça — E-commerce de cachaças artesanais
 
 Trabalho 6 de Tópicos Especiais em Banco de Dados: integração do MongoDB com uma aplicação simples.
 
