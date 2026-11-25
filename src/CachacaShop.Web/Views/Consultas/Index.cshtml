@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Consultas";
+    var consultas = new[]
+    {
+        ("Catalogo", "1. Catálogo com filtros", "Busca por nome (parcial, sem diferenciar maiúsculas), tipo, madeira, faixa de preço e disponibilidade.", "find + $regex, $gte/$lte, $gt"),
+        ("PorEstado", "2. Cachaças por estado do produtor", "Lista as cachaças produzidas em uma UF, juntando com os dados do alambique.", "aggregate: $lookup + $unwind + $match"),
+        ("EstoqueBaixo", "3. Estoque baixo", "Produtos com estoque menor ou igual a um limite, para reposição.", "find + $lte + sort"),
+        ("PedidosCliente", "4. Pedidos de um cliente", "Histórico de pedidos de um cliente filtrando por status e período.", "find em campos de data e status"),
+        ("MaisVendidas", "5. Ranking das mais vendidas", "Cachaças com maior quantidade vendida (ignora cancelados).", "aggregate: $unwind itens + $group + $sort + $limit"),
+        ("Faturamento", "6. Faturamento mensal", "Total faturado, nº de pedidos e ticket médio por mês de um ano.", "aggregate: $match + $group por $month")
+    };
+}
+
+<h2 class="mb-3">Consultas</h2>
+<div class="row row-cols-1 row-cols-md-2 g-3">
+    @foreach (var (action, titulo, descricao, mongo) in consultas)
+    {
+        <div class="col">
+            <a asp-action="@action" class="text-decoration-none text-dark">
+                <div class="card h-100 card-cachaca">
+                    <div class="card-body">
+                        <h5 class="card-title">@titulo</h5>
+                        <p class="card-text">@descricao</p>
+                        <code class="small">@mongo</code>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

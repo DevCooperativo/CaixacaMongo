@@ -1,0 +1,41 @@
+@model ProdutorForm
+@{
+    var edicao = Model.Id is not null;
+    ViewData["Title"] = edicao ? "Editar produtor" : "Novo produtor";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="@(edicao ? "Edit" : "Create")" asp-route-id="@Model.Id" method="post" class="col-lg-8">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Cidade" class="form-label"></label>
+            <input asp-for="Cidade" class="form-control" />
+            <span asp-validation-for="Cidade" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 mb-3">
+            <label asp-for="Estado" class="form-label">UF</label>
+            <select asp-for="Estado" asp-items="Fmt.Ufs()" class="form-select"></select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="AnoFundacao" class="form-label"></label>
+            <input asp-for="AnoFundacao" class="form-control" />
+            <span asp-validation-for="AnoFundacao" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Descricao" class="form-label"></label>
+        <textarea asp-for="Descricao" class="form-control" rows="3"></textarea>
+    </div>
+    <button class="btn btn-primary">Salvar</button>
+    <a class="btn btn-link" asp-action="Index">Voltar</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

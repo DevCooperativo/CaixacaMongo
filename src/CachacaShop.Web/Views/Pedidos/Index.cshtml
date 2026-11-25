@@ -1,0 +1,29 @@
+@model List<Pedido>
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Pedidos</h2>
+    <a class="btn btn-success" asp-action="Create">+ Novo pedido</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr><th>Data</th><th>Cliente</th><th>UF</th><th>Itens</th><th class="text-end">Total</th><th>Status</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@Fmt.DataHora(p.Data)</td>
+            <td>@p.NomeCliente</td>
+            <td>@p.EstadoEntrega</td>
+            <td>@p.QuantidadeGarrafas garrafa(s)</td>
+            <td class="text-end">@Fmt.Moeda(p.Total)</td>
+            <td><span class="badge bg-@Fmt.CorStatus(p.Status)">@Fmt.Rotulo(p.Status)</span></td>
+            <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@p.Id">Abrir</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

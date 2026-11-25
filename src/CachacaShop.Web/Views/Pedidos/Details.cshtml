@@ -1,0 +1,53 @@
+@model Pedido
+@{
+    ViewData["Title"] = "Pedido";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Pedido <small class="text-muted fs-6">#@Model.Id</small></h2>
+    <span class="badge fs-6 bg-@Fmt.CorStatus(Model.Status)">@Fmt.Rotulo(Model.Status)</span>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Cliente</dt><dd class="col-sm-10">@Model.NomeCliente</dd>
+    <dt class="col-sm-2">Data</dt><dd class="col-sm-10">@Fmt.DataHora(Model.Data)</dd>
+    <dt class="col-sm-2">Entrega (UF)</dt><dd class="col-sm-10">@Model.EstadoEntrega</dd>
+</dl>
+
+<table class="table">
+    <thead><tr><th>Cachaça</th><th class="text-end">Preço unit.</th><th class="text-end">Qtd</th><th class="text-end">Subtotal</th></tr></thead>
+    <tbody>
+    @foreach (var i in Model.Itens)
+    {
+        <tr>
+            <td>@i.NomeCachaca</td>
+            <td class="text-end">@Fmt.Moeda(i.PrecoUnitario)</td>
+            <td class="text-end">@i.Quantidade</td>
+            <td class="text-end">@Fmt.Moeda(i.Subtotal)</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr><td colspan="3" class="text-end">Subtotal</td><td class="text-end">@Fmt.Moeda(Model.Subtotal)</td></tr>
+    <tr><td colspan="3" class="text-end">Frete</td><td class="text-end">@(Model.Frete == 0 ? "Grátis" : Fmt.Moeda(Model.Frete))</td></tr>
+    <tr class="fw-bold"><td colspan="3" class="text-end">Total</td><td class="text-end">@Fmt.Moeda(Model.Total)</td></tr>
+    </tfoot>
+</table>
+
+<div class="d-flex gap-2">
+    @foreach (var acao in Model.Status.AcoesDisponiveis())
+    {
+        <form asp-action="Acao" asp-route-id="@Model.Id" method="post"
+              data-confirm="@(acao == AcaoPedido.Cancelar ? "Cancelar o pedido? O estoque será devolvido." : null)">
+            <input type="hidden" name="acao" value="@acao" />
+            <button class="btn @(acao == AcaoPedido.Cancelar ? "btn-outline-danger" : "btn-primary")">@Fmt.Rotulo(acao)</button>
+        </form>
+    }
+    @if (Model.PodeSerExcluido)
+    {
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="Excluir definitivamente este pedido?">
+            <button class="btn btn-danger">Excluir pedido</button>
+        </form>
+    }
+    <a class="btn btn-link" asp-action="Index">Voltar</a>
+</div>

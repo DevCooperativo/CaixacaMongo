@@ -1,0 +1,81 @@
+@model CachacaForm
+@{
+    var edicao = Model.Id is not null;
+    ViewData["Title"] = edicao ? "Editar cachaça" : "Nova cachaça";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="@(edicao ? "Edit" : "Create")" asp-route-id="@Model.Id" method="post" class="col-lg-10">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-md-7 mb-3">
+            <label asp-for="Nome" class="form-label"></label>
+            <input asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="col-md-5 mb-3">
+            <label asp-for="ProdutorId" class="form-label"></label>
+            <select asp-for="ProdutorId" asp-items="ViewBag.Produtores" class="form-select">
+                <option value="">Selecione...</option>
+            </select>
+            <span asp-validation-for="ProdutorId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="Tipo" class="form-label"></label>
+            <select asp-for="Tipo" asp-items="Fmt.Tipos()" class="form-select"></select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Madeira" class="form-label"></label>
+            <select asp-for="Madeira" asp-items="Fmt.Madeiras()" class="form-select"></select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="MesesEnvelhecimento" class="form-label"></label>
+            <input asp-for="MesesEnvelhecimento" class="form-control" />
+            <span asp-validation-for="MesesEnvelhecimento" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <label asp-for="TeorAlcoolico" class="form-label"></label>
+            <input asp-for="TeorAlcoolico" class="form-control" step="0.1" />
+            <span asp-validation-for="TeorAlcoolico" class="text-danger"></span>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label asp-for="VolumeMl" class="form-label"></label>
+            <input asp-for="VolumeMl" class="form-control" />
+            <span asp-validation-for="VolumeMl" class="text-danger"></span>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label asp-for="Preco" class="form-label"></label>
+            <input asp-for="Preco" class="form-control" step="0.01" />
+            <span asp-validation-for="Preco" class="text-danger"></span>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label asp-for="Estoque" class="form-label"></label>
+            @if (edicao)
+            {
+                <input asp-for="Estoque" class="form-control" readonly title="Use 'Repor' na listagem" />
+            }
+            else
+            {
+                <input asp-for="Estoque" class="form-control" />
+            }
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Descricao" class="form-label"></label>
+        <textarea asp-for="Descricao" class="form-control" rows="3"></textarea>
+    </div>
+    <p class="text-muted small">
+        Regras: teor entre 38% e 48%; tipos Ouro/Envelhecida/Premium/Extra Premium exigem madeira;
+        Premium ≥ 12 meses e Extra Premium ≥ 36 meses de envelhecimento.
+    </p>
+    <button class="btn btn-primary">Salvar</button>
+    <a class="btn btn-link" asp-action="Index">Voltar</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

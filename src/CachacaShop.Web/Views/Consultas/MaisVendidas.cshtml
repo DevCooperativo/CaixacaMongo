@@ -1,0 +1,38 @@
+@model MaisVendidasViewModel
+@{
+    ViewData["Title"] = "Mais vendidas";
+    var maior = Model.Resultado.Count > 0 ? Model.Resultado.Max(r => r.QuantidadeVendida) : 1;
+}
+
+<h2>5. Ranking das cachaças mais vendidas</h2>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-md-2">
+        <label class="form-label" asp-for="Top">Top</label>
+        <input asp-for="Top" class="form-control" min="1" max="50" />
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary">Buscar</button></div>
+</form>
+
+<table class="table table-sm">
+    <thead><tr><th>#</th><th>Cachaça</th><th style="width:35%">Garrafas vendidas</th><th class="text-end">Faturamento</th></tr></thead>
+    <tbody>
+    @for (var i = 0; i < Model.Resultado.Count; i++)
+    {
+        var r = Model.Resultado[i];
+        <tr>
+            <td>@(i + 1)º</td>
+            <td>@r.Nome</td>
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="progress flex-grow-1" style="height:.75rem">
+                        <div class="progress-bar bg-cachaca" style="width:@(r.QuantidadeVendida * 100 / maior)%"></div>
+                    </div>
+                    <span>@r.QuantidadeVendida</span>
+                </div>
+            </td>
+            <td class="text-end">@Fmt.Moeda(r.Faturamento)</td>
+        </tr>
+    }
+    </tbody>
+</table>

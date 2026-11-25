@@ -1,0 +1,49 @@
+@model PedidoForm
+@{
+    ViewData["Title"] = "Novo pedido";
+    var cachacas = (List<Cachaca>)ViewBag.Cachacas;
+}
+
+<h2>Novo pedido</h2>
+
+<form asp-action="Create" method="post" class="col-lg-9">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    <div class="mb-3 col-md-6">
+        <label asp-for="ClienteId" class="form-label"></label>
+        <select asp-for="ClienteId" asp-items="ViewBag.Clientes" class="form-select">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
+    </div>
+
+    <table class="table">
+        <thead><tr><th>Cachaça</th><th style="width:8rem">Quantidade</th></tr></thead>
+        <tbody>
+        @for (var i = 0; i < Model.Itens.Count; i++)
+        {
+            <tr>
+                <td>
+                    <select asp-for="Itens[i].CachacaId" class="form-select">
+                        <option value="">—</option>
+                        @foreach (var c in cachacas)
+                        {
+                            <option value="@c.Id" selected="@(c.Id == Model.Itens[i].CachacaId)">
+                                @c.Nome — @Fmt.Moeda(c.Preco) (estoque: @c.Estoque)
+                            </option>
+                        }
+                    </select>
+                </td>
+                <td><input asp-for="Itens[i].Quantidade" class="form-control" min="0" /></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <p class="text-muted small">
+        Frete de @Fmt.Moeda(Pedido.FretePadrao), grátis acima de @Fmt.Moeda(Pedido.ValorFreteGratis).
+        O estoque é baixado ao criar o pedido e devolvido em caso de cancelamento.
+    </p>
+    <button class="btn btn-primary">Criar pedido</button>
+    <a class="btn btn-link" asp-action="Index">Voltar</a>
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,31 @@
+@model EstoqueBaixoViewModel
+@{
+    ViewData["Title"] = "Estoque baixo";
+}
+
+<h2>3. Cachaças com estoque baixo</h2>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-md-3">
+        <label class="form-label" asp-for="Limite">Estoque menor ou igual a</label>
+        <input asp-for="Limite" class="form-control" min="0" />
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary">Buscar</button></div>
+</form>
+
+<p class="text-muted">@Model.Resultado.Count produto(s) precisando de reposição.</p>
+<table class="table table-striped table-sm">
+    <thead><tr><th>Cachaça</th><th>Tipo</th><th class="text-end">Preço</th><th class="text-end">Estoque</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var c in Model.Resultado)
+    {
+        <tr>
+            <td>@c.Nome</td>
+            <td>@Fmt.Rotulo(c.Tipo)</td>
+            <td class="text-end">@Fmt.Moeda(c.Preco)</td>
+            <td class="text-end"><span class="badge @(c.Estoque == 0 ? "bg-danger" : "bg-warning text-dark")">@c.Estoque</span></td>
+            <td class="text-end"><a asp-controller="Cachacas" asp-action="Index" class="btn btn-sm btn-outline-success">Repor</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
